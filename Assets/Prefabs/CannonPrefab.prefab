@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1014530052577690740}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 1.19, y: -0, z: -0}
-  m_LocalScale: {x: 13.3406725, y: 13.340672, z: 35.205914}
+  m_LocalPosition: {x: 0.855, y: -0, z: -0}
+  m_LocalScale: {x: 9.212802, y: 9.212801, z: 24.3125}
   m_Children: []
   m_Father: {fileID: 1541677899568112891}
   m_RootOrder: 2
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5794c2b19a6869940a474eb0d4ed7949, type: 2}
+  - {fileID: 2100000, guid: 6d690c6bbfdced6448c2483efefb5517, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,7 +105,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3699567936250891026}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.48, y: 0, z: 0}
+  m_LocalPosition: {x: 14.15, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1541677899568112891}
@@ -121,7 +121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1541677899568112891}
   m_Layer: 0
-  m_Name: CannonA
+  m_Name: CannonPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -168,7 +168,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9172957492136153317}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.68, y: 0, z: 0}
+  m_LocalPosition: {x: 1.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1541677899568112891}

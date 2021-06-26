@@ -4983,7 +4983,7 @@ GameObject:
   - component: {fileID: 6634986936930837975}
   - component: {fileID: 8416920298224371510}
   m_Layer: 0
-  m_Name: ElectricRay
+  m_Name: ElectricRayPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

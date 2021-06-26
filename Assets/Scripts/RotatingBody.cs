@@ -10,6 +10,8 @@ public class RotatingBody : MonoBehaviour
 
     [SerializeField]
     FloatReference rotatingSpeed;
+
+    float maxRotatingSpeed = 500;
     
     public Vector3 axis;
 
@@ -22,8 +24,25 @@ public class RotatingBody : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float finalSpeed = DecideRotationSpeed();
+        Target targetScript = transform.parent.GetComponent<Target>();
+        if(targetScript != null && targetScript.Hit)
+        {
+            finalSpeed = maxRotatingSpeed;
+        }
+        RotatoBody(finalSpeed);
+    }
+
+    private void RotatoBody(float speed)
+    {
+        orbitAngles = speed * Time.deltaTime * axis;
+        transform.Rotate(orbitAngles);
+    }
+
+    private float DecideRotationSpeed()
+    {
         float finalSpeed;
-        if(rotatingSpeed.Value > rotatingSpeed.constantValue)
+        if (rotatingSpeed.Value > rotatingSpeed.constantValue)
         {
             finalSpeed = rotatingSpeed.Value;
         }
@@ -31,8 +50,6 @@ public class RotatingBody : MonoBehaviour
         {
             finalSpeed = rotatingSpeed.constantValue;
         }
-        orbitAngles = finalSpeed * Time.deltaTime * axis;
-      //  transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(orbitAngles), rotatinSpeed);
-        transform.Rotate(orbitAngles);
+        return finalSpeed;
     }
-}
+  }

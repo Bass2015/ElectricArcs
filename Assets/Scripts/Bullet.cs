@@ -34,7 +34,7 @@ public class Bullet : MonoBehaviour
 
             transform.position = startPoint;
 
-            targetHit.OnTargetHit(transform, other.gameObject);
+            targetHit.OnTargetHit(transform, other.gameObject); 
             Destroy(this.gameObject);
             //Just testing
         }

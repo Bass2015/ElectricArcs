@@ -127,11 +127,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 4
+  autoRotationSpeed: 20
   rotationRange: 60
-  minRecorrido: 10
-  impulseMod: 10
+  impulseMod: 60
   bulletPrefab: {fileID: 1239030471461738136, guid: deb1d02f2d6c7424a8dd2fed4537222c, type: 3}
   bulletSpawnPoint: {fileID: 3762910161393040271}
+  shootingForce:
+    useConstant: 0
+    constantValue: 1
+    Variable: {fileID: 11400000, guid: 461d349f440aeea4ab925185e970bfb6, type: 2}
   targetHitEvent: {fileID: 11400000, guid: 1980e1e34b714e1418597b3cfbc550f8, type: 2}
   resetElementsEvent: {fileID: 11400000, guid: 335d3a1996029b44a84e598fee1a860e, type: 2}
 --- !u!1 &3762910161393040271
@@ -175,6 +179,7 @@ GameObject:
   - component: {fileID: 1085108837857467542}
   - component: {fileID: 8598310077120270484}
   - component: {fileID: 5574443285177540527}
+  - component: {fileID: 6530072911614976046}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -245,6 +250,23 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6530072911614976046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6175498155424516732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0c5349a3a116f44292c233ce2d33443, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatingSpeed:
+    useConstant: 0
+    constantValue: 20
+    Variable: {fileID: 11400000, guid: 461d349f440aeea4ab925185e970bfb6, type: 2}
+  axis: {x: 1, y: 1, z: 0}
 --- !u!1 &7484247261294207065
 GameObject:
   m_ObjectHideFlags: 0

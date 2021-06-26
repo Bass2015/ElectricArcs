@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public struct Cannon
 {
@@ -11,30 +11,34 @@ public struct Cannon
 
 public class ShootingTarget : Target
 {
-	[SerializeField]
+
+    [SerializeField]
     int numberOfCannons;
-   
-	
-	Cannon[] cannons;
+
+    [SerializeField]
+    GameObject cannonPrefab;
+    [SerializeField]
+	List<Cannon> cannons;
+    private float newCannonRotation;
 
     public int NumberOfCannons { get => numberOfCannons;}
 
     // Start is called before the first frame update
     void Start()
     {
-        InitializeCannons();
+        if (numberOfCannons > 0)
+        {
+            InitializeCannons();
+        }
     }
 
     private void InitializeCannons()
     {
-        cannons = new Cannon[numberOfCannons];
+        cannons = new List<Cannon>();
         for (int i = 0; i < numberOfCannons; i++)
         {
-            var newCannon = new Cannon();
             Transform cannonObject = transform.GetChild(i);
-            newCannon.originSpawn = cannonObject.GetChild(0).gameObject;
-            newCannon.destSpawn = cannonObject.GetChild(1).gameObject;
-            cannons[i] = newCannon;
+            AddCannon(cannonObject);
         }
     }
 
@@ -58,7 +62,43 @@ public class ShootingTarget : Target
         }
     }
 
-    
+   
+    public  void CreateCannon()
+    {
+        UnpackPrefab();
+        GameObject newCannon = Instantiate(cannonPrefab);
+        newCannon.transform.parent = this.transform;
+        newCannon.transform.SetSiblingIndex(numberOfCannons);
+        newCannon.transform.localPosition = Vector3.zero;
+        newCannon.transform.localRotation = Quaternion.Euler(0, 0, newCannonRotation);
+        newCannonRotation += 10;
+        numberOfCannons++;
+        newCannon.name = "Cannon_" + numberOfCannons;
+    }
+    private void AddCannon(Transform cannonObject)
+    {
+        var newCannon = new Cannon();
+        newCannon.originSpawn = cannonObject.GetChild(0).gameObject;
+        newCannon.destSpawn = cannonObject.GetChild(1).gameObject;
+        cannons.Add(newCannon);
+    }
+
+    private void UnpackPrefab()
+    {
+        if (PrefabUtility.IsPartOfPrefabInstance(gameObject))
+            PrefabUtility.UnpackPrefabInstance(this.gameObject, PrefabUnpackMode.OutermostRoot, InteractionMode.UserAction);
+    }
+
+    public void RemoveCannon()
+    {
+        if (numberOfCannons > 0)
+        {
+            GameObject cannonToRemove = transform.GetChild(transform.childCount - 2).gameObject;
+            DestroyImmediate(cannonToRemove);
+            newCannonRotation -= 10;
+            numberOfCannons--;
+        }
+    }
 
     protected override void OnTargetHit(Transform shooter, GameObject hitObject)
     {
@@ -67,6 +107,5 @@ public class ShootingTarget : Target
         {
             ShootRays();
         }
-        
     }
 }
