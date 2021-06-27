@@ -5,6 +5,7 @@ using UnityEditor;
 
 public struct Cannon
 {
+    public Transform transform;
 	public GameObject originSpawn;
 	public GameObject destSpawn;
 }
@@ -19,9 +20,11 @@ public class ShootingTarget : Target
     GameObject cannonPrefab;
     [SerializeField]
 	List<Cannon> cannons;
+    [SerializeField]
     private float newCannonRotation;
 
     public int NumberOfCannons { get => numberOfCannons;}
+    public List<Cannon> Cannons { get => cannons;}
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +37,10 @@ public class ShootingTarget : Target
 
     private void InitializeCannons()
     {
-        cannons = new List<Cannon>();
+        if(cannons == null)
+        {
+            cannons = new List<Cannon>();
+        }
         for (int i = 0; i < numberOfCannons; i++)
         {
             Transform cannonObject = transform.GetChild(i);
@@ -63,7 +69,7 @@ public class ShootingTarget : Target
     }
 
    
-    public  void CreateCannon()
+    public void CreateCannon()
     {
         UnpackPrefab();
         GameObject newCannon = Instantiate(cannonPrefab);
@@ -77,7 +83,12 @@ public class ShootingTarget : Target
     }
     private void AddCannon(Transform cannonObject)
     {
+        if(cannons == null)
+        {
+            cannons = new List<Cannon>();
+        }
         var newCannon = new Cannon();
+        newCannon.transform = cannonObject;
         newCannon.originSpawn = cannonObject.GetChild(0).gameObject;
         newCannon.destSpawn = cannonObject.GetChild(1).gameObject;
         cannons.Add(newCannon);
