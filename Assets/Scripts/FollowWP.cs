@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FollowWP : MonoBehaviour
 {
@@ -8,15 +6,16 @@ public class FollowWP : MonoBehaviour
     int currentWP = 0;
 
     float speed;
-
+	
 	public bool moving;
 
 	void Start(){
-		speed = DistanciaTotalARecorrer() / GameManager.instance.levelConfig.TargetTravelTime;
 	}
 
     void Update(){
-		if(moving && waypoints.Length > 0){
+		speed = DistanciaTotalARecorrer() / GameManager.instance.levelConfig.TargetTravelTime;
+
+		if (moving && waypoints.Length > 0){
 			if (Vector3.Distance(this.transform.position, waypoints[currentWP].transform.position) < float.Epsilon)
 				currentWP++;
 

@@ -1,7 +1,7 @@
-
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-#if UNITY_EDITOR
+
 [CustomEditor(typeof(ShootingTarget))]
 public class ShootingTargetEditor : Editor
 {
@@ -27,7 +27,6 @@ public class ShootingTargetEditor : Editor
             }
         }
     }
-
     [DrawGizmo(GizmoType.Pickable | GizmoType.Selected)]
     static void DrawGizmoSelected(ShootingTarget shootingTarget, GizmoType gType)
     {
@@ -64,4 +63,3 @@ public class ShootingTargetEditor : Editor
     }
 }
 #endif
-

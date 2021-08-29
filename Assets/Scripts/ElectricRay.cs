@@ -33,31 +33,35 @@ public class ElectricRay : MonoBehaviour {
 		gameObject.SetActive(false);
 	}
 
+	
 	public void ConnectTwoPoints(Vector3 origin, Vector3 destination)
     {
-		SetNodePosition(nodeAtOrigin, origin);
-		if (destination != null)
-		{
-			SetNodePosition(nodeAtDest, destination);
-			TurnOnBothParticles(destination);
-		}
-        else
-        {
-			nodeAtDest.gameObject.SetActive(false);
-			TurnOnOneParticle();
-		}
+        
+            SetNodePosition(nodeAtOrigin, origin);
+            if (destination != null)
+            {
+                SetNodePosition(nodeAtDest, destination);
+                TurnOnBothParticles(destination);
+            }
+            else
+            {
+                nodeAtDest.gameObject.SetActive(false);
+                TurnOnOneParticle();
+            } 
+        
+      
 	}
 
 	private void TurnOnBothParticles(Vector3 target)
     {
         float distanceBetweenNodes = Vector3.Distance(nodeAtOrigin.position, target);
 		MakeNodesLookAtEachOther();
-        foreach (ParticleSystem particle in particles)
-        {
-            var main = particle.main;
-            main.startSpeed = distanceBetweenNodes / 1.5f;
+		foreach (ParticleSystem particle in particles)
+		{
+			var main = particle.main;
+			main.startSpeed = distanceBetweenNodes / 1.5f;
 			StartCoroutine("BirthAnimation", particle);
-        }
+		}
     }
 
 	void MakeNodesLookAtEachOther()
@@ -74,7 +78,6 @@ public class ElectricRay : MonoBehaviour {
 		var main = particle.main;
 		main.startSpeed = 10;
 		StartCoroutine("BirthAnimation", particle);
-
 	}
 
 	IEnumerator BirthAnimation(ParticleSystem particle)
@@ -89,7 +92,17 @@ public class ElectricRay : MonoBehaviour {
         }
     }
 
-    private void SetNodePosition(Transform node, Vector3 position)
+	IEnumerator FlickerAnimation(ParticleSystem particle)
+	{
+		var emissionModule = particle.emission;
+		var rateOverTime = emissionModule.rateOverTime;
+		rateOverTime.constant = 2;
+		yield return new WaitForSeconds(0.5f);
+		rateOverTime.constant = 10;
+		gameObject.SetActive(false);
+	}
+
+	private void SetNodePosition(Transform node, Vector3 position)
     {
 		node.gameObject.SetActive(true);
 		node.position = position;

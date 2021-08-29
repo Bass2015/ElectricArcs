@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour {
                 if (loadedScene.name.Contains("Level"))
                 {
 					currentLevel = loadedScene.buildIndex;
+					levelConfig = levels[currentLevel - 1];
 					SceneManager.SetActiveScene(loadedScene);
 					return;
                 }
@@ -66,19 +67,19 @@ public class GameManager : MonoBehaviour {
 	IEnumerator LoadNextLevelCoroutine()
 	{
 		enabled = false;
-		if(currentLevel > 0)
-        {
-			yield return SceneManager.UnloadSceneAsync(currentLevel);
-        }
-		if (currentLevel < SceneManager.sceneCountInBuildSettings - 1)
-		{
+		if (currentLevel < SceneManager.sceneCountInBuildSettings - 1) { 
+			if (currentLevel > 0)
+			{
+				yield return SceneManager.UnloadSceneAsync(currentLevel);
+			}
+			levelConfig = levels[currentLevel];
 			currentLevel++;
 			yield return SceneManager.LoadSceneAsync(currentLevel, LoadSceneMode.Additive);
 			SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(currentLevel));
 		}
 		else
 		{
-			print("There are no more levels");
+			yield return SceneManager.UnloadSceneAsync(currentLevel);
 		}
 		enabled = true;
 	}
@@ -139,6 +140,7 @@ public class GameManager : MonoBehaviour {
 	{
 		targetHitEvent.targetHit += rayFactory.OnTargetHit;
 		resetEvent.BaseEvent += rayFactory.OnResetElementsEvent;
+		
 	}
 	private void DisableRayFactory()
     {

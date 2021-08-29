@@ -25,10 +25,12 @@ public class RayFactory : ScriptableObject
         CreateScenePool();
         CreateRayStacks();
         ElectricRay newRay = CreateRay();
+
         newRay.ConnectTwoPoints(origin.position, destination.transform.position);
         activeRays.Push(newRay);
     }
 
+  
     private ElectricRay CreateRay()
     {
         ElectricRay newRay;
