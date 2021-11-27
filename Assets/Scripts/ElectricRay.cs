@@ -10,6 +10,8 @@ public class ElectricRay : MonoBehaviour {
 	public float maxNoiseStrength;
 	public float smoothSpeed;
 
+	public float minFlickeringSpeed;
+
     private void Awake()
     {
 		nodeAtOrigin = transform.GetChild(0);
@@ -23,9 +25,9 @@ public class ElectricRay : MonoBehaviour {
 	}
 	
 	public void Reset(float timeToReset){
-		if(gameObject.activeSelf)
-			StartCoroutine(DeactivateCoroutine(timeToReset));
-	}
+        if (gameObject.activeSelf)
+            StartCoroutine(DeactivateCoroutine(timeToReset));
+    } 
 
 	IEnumerator DeactivateCoroutine(float timeToReset)
     {
@@ -91,19 +93,17 @@ public class ElectricRay : MonoBehaviour {
 		foreach (ParticleSystem particle in particles)
 		{
 			var main = particle.main;
-			main.startSpeed = distanceBetweenNodes / 1.5f;
+			main.startSpeed = distanceBetweenNodes;
 			StartCoroutine("FlickerAnimation", particle);
 		}
 	}
 
 	IEnumerator FlickerAnimation(ParticleSystem particle)
 	{
-        var emissionModule = particle.emission;
-        var rateOverTime = emissionModule.rateOverTime;
-        rateOverTime.constant = 2;
-        yield return new WaitForSeconds(0.5f);
-        rateOverTime.constant = 10;
-        gameObject.SetActive(false);
+        var mainModule = particle.main;
+		float lifetime = mainModule.startLifetime.constant;
+
+		yield return new WaitForEndOfFrame();
     }
 
 	private void SetNodePosition(Transform node, Vector3 position)

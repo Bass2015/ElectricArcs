@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour {
     {
         targetHitEvent.targetHit += OnTargetHit;
         //winEvent.BaseEvent += OnWinEvent;
-        EnableRayFactory();
+      //  EnableRayFactory();
     }
 
     
@@ -134,7 +134,7 @@ public class GameManager : MonoBehaviour {
     {
         targetHitEvent.targetHit -= OnTargetHit;
         //winEvent.BaseEvent -= OnWinEvent;
-        DisableRayFactory();
+       // DisableRayFactory();
     }
 	private void EnableRayFactory()
 	{
