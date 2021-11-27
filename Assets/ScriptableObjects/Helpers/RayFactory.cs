@@ -10,10 +10,13 @@ public class RayFactory : ScriptableObject
     ElectricRay rayPrefab;
 
     [SerializeField]
-    TargetHitEvent targetHit;
+    TargetHitEvent targetHitEvent;
 
     [SerializeField]
     GameEvent resetElementsEvent;
+
+    [SerializeField]
+    GameEvent winEvent;
 
     Stack<ElectricRay> sleepingRays;
     Stack<ElectricRay> activeRays;
@@ -27,8 +30,8 @@ public class RayFactory : ScriptableObject
         ElectricRay newRay = CreateRay();
 
 
-        newRay.Flicker();
-        //newRay.ConnectTwoPoints(origin.position, destination.transform.position);
+        //newRay.Flicker(origin.position, destination.transform.position);
+        newRay.FinalConnection(origin.position, destination.transform.position);
         activeRays.Push(newRay);
     }
 
@@ -90,15 +93,20 @@ public class RayFactory : ScriptableObject
         RemoveRays();
     }
 
+    public void OnWinEvent()
+    {
+
+    }
+
     private void OnEnable()
     {
-        targetHit.targetHit += OnTargetHit;
+        targetHitEvent.targetHit += OnTargetHit;
         resetElementsEvent.BaseEvent += OnResetElementsEvent;
     }
 
     private void OnDisable()
     {
-        targetHit.targetHit -= OnTargetHit;
+        targetHitEvent.targetHit -= OnTargetHit;
         resetElementsEvent.BaseEvent -= OnResetElementsEvent;
     }
     

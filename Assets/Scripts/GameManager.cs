@@ -112,8 +112,8 @@ public class GameManager : MonoBehaviour {
 	}
 	IEnumerator WaitAndCheckTargets() 
 	{
-		yield return new WaitForSeconds(secondsBeforeReset);
-		targetChecker.CheckIfAllHit();
+        yield return new WaitForSeconds(secondsBeforeReset);
+        targetChecker.CheckIfAllHit();
 		waitForReset = null;
 	}
 	private void OnWinEvent()
@@ -140,11 +140,13 @@ public class GameManager : MonoBehaviour {
 	{
 		targetHitEvent.targetHit += rayFactory.OnTargetHit;
 		resetEvent.BaseEvent += rayFactory.OnResetElementsEvent;
+		winEvent.BaseEvent += rayFactory.OnWinEvent;
 	}
 	private void DisableRayFactory()
     {
         targetHitEvent.targetHit -= rayFactory.OnTargetHit;
         resetEvent.BaseEvent -= rayFactory.OnResetElementsEvent;
+		winEvent.BaseEvent -= rayFactory.OnWinEvent;
     }
 	#endregion
 
