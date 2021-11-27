@@ -62,6 +62,7 @@ public class ElectricRay : MonoBehaviour {
 			main.startSpeed = distanceBetweenNodes / 1.5f;
 			StartCoroutine("BirthAnimation", particle);
 		}
+		Debug.Log("BOTH particles");
     }
 
 	void MakeNodesLookAtEachOther()
@@ -78,6 +79,9 @@ public class ElectricRay : MonoBehaviour {
 		var main = particle.main;
 		main.startSpeed = 10;
 		StartCoroutine("BirthAnimation", particle);
+
+		Debug.Log("ONE particle");
+
 	}
 
 	IEnumerator BirthAnimation(ParticleSystem particle)
@@ -94,12 +98,14 @@ public class ElectricRay : MonoBehaviour {
 
 	IEnumerator FlickerAnimation(ParticleSystem particle)
 	{
-		var emissionModule = particle.emission;
+		yield return new WaitForEndOfFrame();
+
+		/*var emissionModule = particle.emission;
 		var rateOverTime = emissionModule.rateOverTime;
 		rateOverTime.constant = 2;
 		yield return new WaitForSeconds(0.5f);
 		rateOverTime.constant = 10;
-		gameObject.SetActive(false);
+		gameObject.SetActive(false);*/
 	}
 
 	private void SetNodePosition(Transform node, Vector3 position)
