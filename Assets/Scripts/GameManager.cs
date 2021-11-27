@@ -140,7 +140,6 @@ public class GameManager : MonoBehaviour {
 	{
 		targetHitEvent.targetHit += rayFactory.OnTargetHit;
 		resetEvent.BaseEvent += rayFactory.OnResetElementsEvent;
-		
 	}
 	private void DisableRayFactory()
     {
@@ -163,6 +162,14 @@ public class GameManager : MonoBehaviour {
         {
 			mouseTravel.Value = SetMouseTravel();
 		}
+
+		if(Application.platform == RuntimePlatform.Android)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+				Application.Quit();
+            }
+        }
 		
 	}
     private void LateUpdate()

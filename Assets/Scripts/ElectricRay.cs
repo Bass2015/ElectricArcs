@@ -62,6 +62,7 @@ public class ElectricRay : MonoBehaviour {
 			main.startSpeed = distanceBetweenNodes / 1.5f;
 			StartCoroutine("BirthAnimation", particle);
 		}
+		Debug.Log("BOTH particles");
     }
 
 	void MakeNodesLookAtEachOther()
@@ -78,6 +79,9 @@ public class ElectricRay : MonoBehaviour {
 		var main = particle.main;
 		main.startSpeed = 10;
 		StartCoroutine("BirthAnimation", particle);
+
+		Debug.Log("ONE particle");
+
 	}
 
 	IEnumerator BirthAnimation(ParticleSystem particle)
