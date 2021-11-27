@@ -26,7 +26,9 @@ public class RayFactory : ScriptableObject
         CreateRayStacks();
         ElectricRay newRay = CreateRay();
 
-        newRay.ConnectTwoPoints(origin.position, destination.transform.position);
+
+        newRay.Flicker();
+        //newRay.ConnectTwoPoints(origin.position, destination.transform.position);
         activeRays.Push(newRay);
     }
 
