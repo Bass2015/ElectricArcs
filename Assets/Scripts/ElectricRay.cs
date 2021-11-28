@@ -10,6 +10,8 @@ public class ElectricRay : MonoBehaviour {
 	public float maxNoiseStrength;
 	public float smoothSpeed;
 
+	public float minFlickeringSpeed;
+
     private void Awake()
     {
 		nodeAtOrigin = transform.GetChild(0);
@@ -23,9 +25,9 @@ public class ElectricRay : MonoBehaviour {
 	}
 	
 	public void Reset(float timeToReset){
-		if(gameObject.activeSelf)
-			StartCoroutine(DeactivateCoroutine(timeToReset));
-	}
+        if (gameObject.activeSelf)
+            StartCoroutine(DeactivateCoroutine(timeToReset));
+    } 
 
 	IEnumerator DeactivateCoroutine(float timeToReset)
     {
@@ -34,25 +36,15 @@ public class ElectricRay : MonoBehaviour {
 	}
 
 	
-	public void ConnectTwoPoints(Vector3 origin, Vector3 destination)
+
+	public void FinalConnection(Vector3 origin, Vector3 destination)
     {
-        
-            SetNodePosition(nodeAtOrigin, origin);
-            if (destination != null)
-            {
-                SetNodePosition(nodeAtDest, destination);
-                TurnOnBothParticles(destination);
-            }
-            else
-            {
-                nodeAtDest.gameObject.SetActive(false);
-                TurnOnOneParticle();
-            } 
-        
-      
+        SetNodePosition(nodeAtOrigin, origin);
+        SetNodePosition(nodeAtDest, destination);
+	    Born(destination);
 	}
 
-	private void TurnOnBothParticles(Vector3 target)
+	private void Born(Vector3 target)
     {
         float distanceBetweenNodes = Vector3.Distance(nodeAtOrigin.position, target);
 		MakeNodesLookAtEachOther();
@@ -62,7 +54,6 @@ public class ElectricRay : MonoBehaviour {
 			main.startSpeed = distanceBetweenNodes / 1.5f;
 			StartCoroutine("BirthAnimation", particle);
 		}
-		Debug.Log("BOTH particles");
     }
 
 	void MakeNodesLookAtEachOther()
@@ -79,9 +70,6 @@ public class ElectricRay : MonoBehaviour {
 		var main = particle.main;
 		main.startSpeed = 10;
 		StartCoroutine("BirthAnimation", particle);
-
-		Debug.Log("ONE particle");
-
 	}
 
 	IEnumerator BirthAnimation(ParticleSystem particle)
@@ -96,17 +84,27 @@ public class ElectricRay : MonoBehaviour {
         }
     }
 
+	public void Flicker(Vector3 origin, Vector3 target)
+    {
+		SetNodePosition(nodeAtOrigin, origin);
+		SetNodePosition(nodeAtDest, target);
+		float distanceBetweenNodes = Vector3.Distance(nodeAtOrigin.position, target);
+		MakeNodesLookAtEachOther();
+		foreach (ParticleSystem particle in particles)
+		{
+			var main = particle.main;
+			main.startSpeed = distanceBetweenNodes;
+			StartCoroutine("FlickerAnimation", particle);
+		}
+	}
+
 	IEnumerator FlickerAnimation(ParticleSystem particle)
 	{
-		yield return new WaitForEndOfFrame();
+        var mainModule = particle.main;
+		float lifetime = mainModule.startLifetime.constant;
 
-		/*var emissionModule = particle.emission;
-		var rateOverTime = emissionModule.rateOverTime;
-		rateOverTime.constant = 2;
-		yield return new WaitForSeconds(0.5f);
-		rateOverTime.constant = 10;
-		gameObject.SetActive(false);*/
-	}
+		yield return new WaitForEndOfFrame();
+    }
 
 	private void SetNodePosition(Transform node, Vector3 position)
     {

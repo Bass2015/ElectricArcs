@@ -377,7 +377,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 535243278}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
@@ -590,7 +590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f85861eeb6162143a4afddae92c4618, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  secondsBeforeReset: 1.5
+  secondsBeforeReset: 0.25
   levels:
   - {fileID: 11400000, guid: 4fc4e0f2576313442ae93f392dca4c1d, type: 2}
   - {fileID: 11400000, guid: 6c6f05cea829fb746bec18a8ff9247ff, type: 2}

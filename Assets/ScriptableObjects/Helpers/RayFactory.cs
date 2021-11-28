@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,15 +11,22 @@ public class RayFactory : ScriptableObject
     ElectricRay rayPrefab;
 
     [SerializeField]
-    TargetHitEvent targetHit;
+    TargetHitEvent targetHitEvent;
 
     [SerializeField]
     GameEvent resetElementsEvent;
+
+    [SerializeField]
+    GameEvent winEvent;
 
     Stack<ElectricRay> sleepingRays;
     Stack<ElectricRay> activeRays;
 
     Scene rayPoolScene;
+
+   
+
+    private Stack<Connection> connections = new Stack<Connection>();
 
     public void OnTargetHit(Transform origin, GameObject destination)
     {
@@ -26,11 +34,19 @@ public class RayFactory : ScriptableObject
         CreateRayStacks();
         ElectricRay newRay = CreateRay();
 
-        newRay.ConnectTwoPoints(origin.position, destination.transform.position);
+        addConnection(origin, destination);
+        newRay.Flicker(origin.position, destination.transform.position);
+       // newRay.FinalConnection(origin.position, destination.transform.position);
         activeRays.Push(newRay);
     }
 
-  
+    private void addConnection(Transform origin, GameObject destination)
+    {
+        Connection connection = new Connection(origin.position, destination.transform.position);
+        connections.Push(connection);
+        Debug.Log("connection added");
+    }
+
     private ElectricRay CreateRay()
     {
         ElectricRay newRay;
@@ -86,18 +102,52 @@ public class RayFactory : ScriptableObject
     public  void OnResetElementsEvent()
     {
         RemoveRays();
+        connections.Clear();
+        Debug.Log("Connections Cleared");
+    }
+
+    public void OnWinEvent()
+    {
+        Debug.Log("winevent");
+        Connection connection;
+        foreach (var ray in activeRays)
+        {
+         ray.gameObject.SetActive(true);
+            if (connections.Count > 0)
+            {
+                connection = connections.Pop();
+                ray.FinalConnection(connection.Origin,
+                                connection.Destination);
+            }
+        }
     }
 
     private void OnEnable()
     {
-        targetHit.targetHit += OnTargetHit;
+        targetHitEvent.targetHit += OnTargetHit;
         resetElementsEvent.BaseEvent += OnResetElementsEvent;
+        winEvent.BaseEvent += OnWinEvent;
     }
 
     private void OnDisable()
     {
-        targetHit.targetHit -= OnTargetHit;
+        targetHitEvent.targetHit -= OnTargetHit;
         resetElementsEvent.BaseEvent -= OnResetElementsEvent;
+        winEvent.BaseEvent -= OnWinEvent;
+
     }
-    
+    private struct Connection
+    {
+        Vector3 origin;
+        Vector3 destination;
+
+        public Connection (Vector3 origin, Vector3 destination)
+        {
+            this.origin = origin;
+            this.destination = destination;
+        }
+
+        public Vector3 Origin { get => origin;}
+        public Vector3 Destination { get => destination; }
+    }
 }

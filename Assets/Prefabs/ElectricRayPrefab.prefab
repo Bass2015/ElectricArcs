@@ -5020,6 +5020,7 @@ MonoBehaviour:
   minNoiseStrength: 0.015
   maxNoiseStrength: 0.5
   smoothSpeed: 0.5
+  minFlickeringSpeed: 0
 --- !u!1 &6634986937124980880
 GameObject:
   m_ObjectHideFlags: 0
