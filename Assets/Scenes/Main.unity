@@ -304,7 +304,7 @@ MonoBehaviour:
   cursorTexture: {fileID: 0}
   cursorMode: 0
   hotSpot: {x: 0, y: 0}
-  scaleMultiplier: 0.99
+  scaleMultiplier: 0.9
 --- !u!212 &368047681
 SpriteRenderer:
   m_ObjectHideFlags: 0
