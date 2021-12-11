@@ -10,10 +10,10 @@ public class FollowWP : MonoBehaviour
 	public bool moving;
 
 	void Start(){
+		speed = DistanciaTotalARecorrer() / GameManager.instance.levelConfig.TargetTravelTime;
 	}
 
-    void Update(){
-		speed = DistanciaTotalARecorrer() / GameManager.instance.levelConfig.TargetTravelTime;
+	void Update(){
 
 		if (moving && waypoints.Length > 0){
 			if (Vector3.Distance(this.transform.position, waypoints[currentWP].transform.position) < float.Epsilon)

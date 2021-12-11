@@ -11,11 +11,12 @@ public class FollowWPAUX : MonoBehaviour
 
 	void Start()
 	{
+		speed = DistanciaTotalARecorrer() / GameManager.instance.levelConfig.TargetTravelTime;
+
 	}
 
 	void Update()
 	{
-		speed = DistanciaTotalARecorrer() / GameManager.instance.levelConfig.TargetTravelTime;
 
 		if (moving && waypoints.Length > 0)
 		{
