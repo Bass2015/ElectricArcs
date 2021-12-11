@@ -2,11 +2,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class Finger : MonoBehaviour
+public class Finger : FollowWP
 {
-    public CursorMode cursorMode = CursorMode.Auto;
-    public Vector2 hotSpot = Vector2.zero;
-
     const float ScaleMultiplier = 0.8f;
 
     Vector3 initFingerScale;
@@ -15,30 +12,21 @@ public class Finger : MonoBehaviour
 
     private void Start()
     {
-        
+        InitVariables();
+        InitSpeed();
+    }
+
+    private void InitVariables()
+    {
         tapping = transform.GetChild(1);
         finger = transform.GetChild(0);
         initFingerScale = finger.localScale;
         finger.localScale = initFingerScale * ScaleMultiplier;
-
     }
 
     private void Update()
     {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 actualPos = transform.position;
-
-        transform.position = Vector3.Lerp(mousePos, actualPos, ScaleMultiplier); ;
-
-        if (Input.GetMouseButton(0))
-        {
-            TappingAction();
-
-        }
-        else
-        {
-            UntappingAction();
-        }
+        Move();
     }
 
     private void UntappingAction()
@@ -52,17 +40,4 @@ public class Finger : MonoBehaviour
         finger.localScale = initFingerScale * ScaleMultiplier;
         tapping.gameObject.SetActive(true);
     }
-
-    IEnumerator CheckingCoroutine()
-    {
-
-
-        for (int i = 0; i < 5; i++)
-       
-        {
-            print("Coroutina en marcha");
-            yield return new WaitForSeconds(5);
-        }
-    }
-
 }

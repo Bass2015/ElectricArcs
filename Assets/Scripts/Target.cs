@@ -27,7 +27,7 @@ public class Target : MonoBehaviour
         {
             hit = true;
         }
-        var followWPScript = GetComponent<FollowWP>();
+        var followWPScript = GetComponent<FollowWPLoop>();
         if (followWPScript != null)
         {
             followWPScript.moving = false;
@@ -36,7 +36,7 @@ public class Target : MonoBehaviour
     protected virtual void OnResetEvent()
     {
         hit = false;
-        var followWPScript = GetComponent<FollowWP>();
+        var followWPScript = GetComponent<FollowWPLoop>();
         if (followWPScript != null)
         {
             followWPScript.moving = true;

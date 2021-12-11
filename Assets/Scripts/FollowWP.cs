@@ -1,33 +1,32 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class FollowWP : MonoBehaviour
 {
-    public GameObject[] waypoints;
-    int currentWP = 0;
+	public GameObject[] waypoints;
+	protected int currentWP = 0;
 
-    float speed;
-	
+	float speed;
+
 	public bool moving;
 
-	void Start(){
-		speed = DistanciaTotalARecorrer() / GameManager.instance.levelConfig.TargetTravelTime;
+	void Start()
+	{
+		InitSpeed();
 	}
 
-	void Update(){
+	void Update()
+    {
+        Move();
+    }
 
-		if (moving && waypoints.Length > 0){
-			if (Vector3.Distance(this.transform.position, waypoints[currentWP].transform.position) < float.Epsilon)
-				currentWP++;
+    protected void Move()
+    {
+        RefreshCurrentWaypoint();
+        MoveToNextWP();
+    }
 
-			if (currentWP >= waypoints.Length)
-				currentWP = 0;
-
-			Vector3 moveTo = Vector3.MoveTowards(transform.position, waypoints[currentWP].transform.position, speed * Time.deltaTime);
-			transform.position = moveTo;
-		}
-	}
-
-	float DistanciaTotalARecorrer(){
+    protected void InitSpeed()
+	{
 		float distance = 0;
 		for (int i = 0; i < waypoints.Length; i++)
 		{
@@ -36,6 +35,28 @@ public class FollowWP : MonoBehaviour
 				distance += Vector3.Distance(waypoints[i].transform.position, waypoints[i + 1].transform.position);
 			}
 		}
-		return distance * 2;
+		speed = (distance * 2) / GameManager.instance.levelConfig.TargetTravelTime; ;
+	}
+
+	protected void MoveToNextWP()
+    {
+        if (CanMove())
+        {
+			Vector3 nextPoint = waypoints[currentWP].transform.position;
+			Vector3 moveTo = Vector3.MoveTowards(transform.position, nextPoint, speed * Time.deltaTime);
+            transform.position = moveTo; 
+        }
+    }
+
+	private bool CanMove()
+	{
+		return moving && waypoints.Length > 0 && currentWP < waypoints.Length;
+	}
+
+	protected virtual void RefreshCurrentWaypoint()
+    {
+		if (currentWP < waypoints.Length && 
+			Vector3.Distance(this.transform.position, waypoints[currentWP].transform.position) < float.Epsilon)
+			currentWP++;
 	}
 }
