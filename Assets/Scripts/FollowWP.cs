@@ -5,7 +5,8 @@ public class FollowWP : MonoBehaviour
 	public GameObject[] waypoints;
 	protected int currentWP = 0;
 
-	float speed;
+	[SerializeField]
+	protected float speed;
 
 	public bool moving;
 
@@ -16,14 +17,18 @@ public class FollowWP : MonoBehaviour
 
 	void Update()
     {
-        Move();
+       Move();
     }
 
     protected void Move()
     {
         RefreshCurrentWaypoint();
-        MoveToNextWP();
-    }
+        if (CanMove())
+        {
+			MoveToNextWP();
+		}
+		
+	}
 
     protected void InitSpeed()
 	{
@@ -38,14 +43,11 @@ public class FollowWP : MonoBehaviour
 		speed = (distance * 2) / GameManager.instance.levelConfig.TargetTravelTime; ;
 	}
 
-	protected void MoveToNextWP()
+	protected virtual void MoveToNextWP()
     {
-        if (CanMove())
-        {
-			Vector3 nextPoint = waypoints[currentWP].transform.position;
-			Vector3 moveTo = Vector3.MoveTowards(transform.position, nextPoint, speed * Time.deltaTime);
-            transform.position = moveTo; 
-        }
+		Vector3 nextPoint = waypoints[currentWP].transform.position;
+		Vector3 moveTo = Vector3.MoveTowards(transform.position, nextPoint, speed * Time.deltaTime);
+		transform.position =  moveTo; 
     }
 
 	private bool CanMove()
@@ -55,8 +57,13 @@ public class FollowWP : MonoBehaviour
 
 	protected virtual void RefreshCurrentWaypoint()
     {
-		if (currentWP < waypoints.Length && 
-			Vector3.Distance(this.transform.position, waypoints[currentWP].transform.position) < float.Epsilon)
-			currentWP++;
-	}
+        if (ArrivedAtDestination())
+            currentWP++;
+    }
+
+    protected bool ArrivedAtDestination()
+    {
+        return currentWP < waypoints.Length &&
+                    Vector3.Distance(this.transform.position, waypoints[currentWP].transform.position) < float.Epsilon;
+    }
 }
