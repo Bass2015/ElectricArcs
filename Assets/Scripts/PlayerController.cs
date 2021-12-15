@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 	public float autoRotationSpeed;
 	public float rotationRange;
 	public float impulseMod;
-	bool waitingForResult;
+	protected bool waitingForResult;
     #endregion
 
     #region References
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField]
 	FloatReference shootingForce;
 
-	private Transform cannonPivot;
+	protected Transform cannonPivot;
     #endregion
 
     private void Start()
@@ -40,19 +40,28 @@ public class PlayerController : MonoBehaviour
 	{
         if (!waitingForResult)
         {
-            if (Input.GetMouseButton(0))
-            {
-                OrientateTurretTowards(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-	        }
-            if (Input.GetMouseButtonUp(0))
-            {
-				Shoot(shootingForce.Value);
-            } 
+            Aim();
+            Shoot();
         }
-	}
-	
+    }
 
-	void OrientateTurretTowards(Vector3 position)
+    protected void Shoot()
+    {
+        if (Input.GetMouseButtonUp(0))
+        {
+            Shoot(shootingForce.Value);
+        }
+    }
+
+    protected void Aim()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            OrientateTurretTowards(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        }
+    }
+
+    void OrientateTurretTowards(Vector3 position)
 	{
 		Vector3 direction = new Vector3(position.x, position.y, 0) - cannonPivot.position;
 		Vector3 lookToEuler = (Quaternion.LookRotation(cannonPivot.forward, direction)).eulerAngles;
@@ -116,14 +125,14 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-    protected void OnEnable()
+    protected virtual void OnEnable()
 	{
 		targetHitEvent.targetHit += OnTargetHit;
 		resetElementsEvent.BaseEvent += OnResetEvent;
 	}
 
 
-    protected void OnDisable()
+    protected  virtual void OnDisable()
 	{
 		targetHitEvent.targetHit -= OnTargetHit;
 		resetElementsEvent.BaseEvent -= OnResetEvent;

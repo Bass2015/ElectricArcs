@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotatingBody : MonoBehaviour
+public class SpinningBody : MonoBehaviour
 {
 
     Vector3 orbitAngles = new Vector3(0, 0, 0);
@@ -15,25 +15,24 @@ public class RotatingBody : MonoBehaviour
     
     public Vector3 axis;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
+        SpinBody();
+    }
+
+    protected void SpinBody()
+    {
         float finalSpeed = DecideRotationSpeed();
         Target targetScript = transform.parent.GetComponent<Target>();
-        if(targetScript != null && targetScript.Hit)
+        if (targetScript != null && targetScript.Hit)
         {
             finalSpeed = maxRotatingSpeed;
         }
-        RotatoBody(finalSpeed);
+        SpinBody(finalSpeed);
     }
 
-    private void RotatoBody(float speed)
+    private void SpinBody(float speed)
     {
         orbitAngles = speed * Time.deltaTime * axis;
         transform.Rotate(orbitAngles);

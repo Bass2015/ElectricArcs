@@ -11,16 +11,23 @@ public class Finger : FollowWP
     Transform finger;
 
     public float elapsedTime;
-    public float travelTime;
+    public float travelTime = 0;
 
     Vector3 start;
     Vector3 end;
     public bool waiting;
 
+    [SerializeField]
+    TutorialEvent tutorialEvent;
+
+    public float startTravelTime = 2.5f;
+    public float dragTravelTime = 1f;
+    public float shortShotTravelTime;
+    public float longShotTravelTime;
+
     private void Start()
     {
-        InitVariables();
-        
+        InitVariables()
     }
 
     private void InitVariables()
@@ -42,36 +49,40 @@ public class Finger : FollowWP
         if (!waiting)
         {
             Move();
-
         }
     }
 
     private void RefreshTravelTime()
     {
-        int plusOne = waypoints.Length + 1;
         switch (currentWP)
         {
             case 0:
                 travelTime = 0;
                 break;
             case 1:
-                travelTime = 5;
+                travelTime = startTravelTime;
                 break;
             case 2:
-                travelTime = 1.8f;
+                travelTime = dragTravelTime;
                 TappingAction();
                 break;
             case 6:
-                UntappingAction();
-                waiting = true;
+                tutorialEvent.RaiseEvent(TutorialEvent.TutorialEventType.EnableAim);
                 break;
             case 7:
                 TappingAction();
+                travelTime = shortShotTravelTime;
                 break;
             case 8:
-                UntappingAction();
+                tutorialEvent.RaiseEvent(TutorialEvent.TutorialEventType.EnableShoot);
                 break;
         }
+    }
+
+    private IEnumerator WaitingCoroutine(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        waiting = false;
     }
 
     protected override void MoveToNextWP()
@@ -79,7 +90,7 @@ public class Finger : FollowWP
         elapsedTime += Time.deltaTime;
         float percentage = elapsedTime / travelTime;
         transform.position = Vector3.Lerp(start, end, Mathf.SmoothStep(0, 1, percentage));
-        
+
     }
 
     protected override void RefreshCurrentWaypoint()
@@ -88,7 +99,7 @@ public class Finger : FollowWP
         {
             start = waypoints[currentWP].transform.position;
             base.RefreshCurrentWaypoint();
-            if(currentWP < waypoints.Length)
+            if (currentWP < waypoints.Length)
                 end = waypoints[currentWP].transform.position;
             elapsedTime = 0;
             RefreshTravelTime();
@@ -107,4 +118,32 @@ public class Finger : FollowWP
         finger.localScale = initFingerScale * ScaleMultiplier;
         tapping.gameObject.SetActive(true);
     }
+
+    void OnTutorialEvent(TutorialEvent.TutorialEventType eType)
+    {
+        switch (eType)
+        {
+            case TutorialEvent.TutorialEventType.EnableAim:
+                UntappingAction();
+                waiting = true;
+                StartCoroutine("WaitingCoroutine", 2f);
+                break;
+            case TutorialEvent.TutorialEventType.EnableShoot:
+                UntappingAction();
+                waiting = true;
+                StartCoroutine("WaitingCoroutine", 2f);
+                break;
+        }
+    }
+
+    protected void OnEnable()
+    {
+        tutorialEvent.tutorialEvent += OnTutorialEvent;
+    }
+
+    protected void OnDisable()
+    {
+        tutorialEvent.tutorialEvent -= OnTutorialEvent;
+    }
+
 }
