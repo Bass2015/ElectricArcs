@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9aa6386d4424ed542a676b37d2c19834, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 4
+  aimingSpeed: 25
   autoRotationSpeed: 20
   rotationRange: 60
   impulseMod: 60

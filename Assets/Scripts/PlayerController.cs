@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     #region Variables
     [Header("Variables")]
-	public float rotationSpeed;
+	public float aimingSpeed;
 	public float autoRotationSpeed;
 	public float rotationRange;
 	public float impulseMod;
@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
 		Vector3 direction = new Vector3(position.x, position.y, 0) - cannonPivot.position;
 		Vector3 lookToEuler = (Quaternion.LookRotation(cannonPivot.forward, direction)).eulerAngles;
 		Quaternion lookRotation = Quaternion.Euler(lookToEuler.x, lookToEuler.y, lookToEuler.z + 90);
-		cannonPivot.rotation = Quaternion.Slerp(cannonPivot.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+        cannonPivot.rotation = Quaternion.Slerp(cannonPivot.rotation, lookRotation, aimingSpeed * Time.deltaTime);
 	}
 
     protected void Shoot(float impulse)
