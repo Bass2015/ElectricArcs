@@ -10,6 +10,7 @@ public class TargetActivator : MonoBehaviour
     void Start()
     {
         target.SetActive(false);
+        print("ACTIVATOR");
     }
 
     // Update is called once per frame

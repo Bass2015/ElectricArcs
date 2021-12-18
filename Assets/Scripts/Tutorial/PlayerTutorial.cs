@@ -9,16 +9,20 @@ public class PlayerTutorial : PlayerController
 
     [SerializeField]
     TutorialEvent tutorialManager;
+    
 
     private void OnTutorialEvent(TutorialEvent.TutorialEventType eType)
     {
         switch (eType)
         {
-            case TutorialEvent.TutorialEventType.EnableAim:
+            case TutorialEvent.TutorialEventType.StartDragging:
                 aimEnabled = true;
                 break;
             case TutorialEvent.TutorialEventType.EnableShoot:
                 shootEnabled = true;
+                break;
+            case TutorialEvent.TutorialEventType.EnableFastShot:
+                shootingForce.useConstant = false;
                 break;
         }
     }
@@ -28,6 +32,8 @@ public class PlayerTutorial : PlayerController
     void Start()
     {
         cannonPivot = transform.GetChild(0);
+        shootingForce.useConstant = true;
+        shootingForce.constantValue = 1;
     }
 
     // Update is called once per frame
@@ -56,5 +62,13 @@ public class PlayerTutorial : PlayerController
     {
         base.OnDisable();
         tutorialManager.tutorialEvent -= OnTutorialEvent;
+    }
+
+    protected override void Shoot()
+    {
+        if (Input.GetMouseButtonUp(0))
+            {
+                Shoot(shootingForce.Value);
+            }
     }
 }

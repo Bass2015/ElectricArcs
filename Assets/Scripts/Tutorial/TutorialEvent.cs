@@ -8,7 +8,7 @@ public class TutorialEvent : ScriptableObject
 {
     public enum TutorialEventType
     {
-        Start, EnableAim, EnableShoot, ShowTarget, End
+        Start, StartDragging, EnableShoot, EnableFastShot, ShowTarget, End
     }
 
 

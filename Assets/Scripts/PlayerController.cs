@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 	GameObject bulletSpawnPoint;
 
 	[SerializeField]
-	FloatReference shootingForce;
+	protected FloatReference shootingForce;
 
 	protected Transform cannonPivot;
     #endregion
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    protected void Shoot()
+    protected virtual void Shoot()
     {
         if (Input.GetMouseButtonUp(0))
         {
@@ -69,16 +69,17 @@ public class PlayerController : MonoBehaviour
 		cannonPivot.rotation = Quaternion.Slerp(cannonPivot.rotation, lookRotation, rotationSpeed * Time.deltaTime);
 	}
 
-	void Shoot(float impulse)
-	{
-		Rigidbody bulletRb = GameObject.Instantiate(bulletPrefab,
-			bulletSpawnPoint.transform.position, 
-			cannonPivot.rotation).GetComponent<Rigidbody>();
-		float finalImpulse = impulse / impulseMod;
-		finalImpulse = Mathf.Clamp(finalImpulse, shootingForce.constantValue, finalImpulse);
+    protected void Shoot(float impulse)
+    {
+        Rigidbody bulletRb = GameObject.Instantiate(bulletPrefab,
+            bulletSpawnPoint.transform.position,
+            cannonPivot.rotation).GetComponent<Rigidbody>();
+        float finalImpulse = impulse / impulseMod;
+        finalImpulse = Mathf.Clamp(finalImpulse, shootingForce.constantValue, finalImpulse);
 
-		bulletRb.AddForce(bulletRb.gameObject.transform.right * finalImpulse, ForceMode.Impulse);
-	}
+        bulletRb.AddForce(bulletRb.gameObject.transform.right * finalImpulse, ForceMode.Impulse);
+
+    }
 
     #endregion
 

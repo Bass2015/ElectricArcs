@@ -24,10 +24,13 @@ public class Finger : FollowWP
     public float dragTravelTime = 1f;
     public float shortShotTravelTime;
     public float longShotTravelTime;
+    public float exitTravelTime;
 
+
+    
     private void Start()
     {
-        InitVariables()
+        InitVariables();
     }
 
     private void InitVariables()
@@ -38,8 +41,8 @@ public class Finger : FollowWP
         finger.localScale = initFingerScale * ScaleMultiplier;
         start = transform.position;
         end = waypoints[currentWP].transform.position;
+        
         UntappingAction();
-
     }
 
 
@@ -51,31 +54,47 @@ public class Finger : FollowWP
             Move();
         }
     }
-
+    const int StartDraggingIndex = 2;
+    const int EndDraggingIndex = 6;
+    const int StartSlowShotIndex = 7;
+    const int EndSlowShotIndex = 8;
+    const int StartFastShotIndex = 9;
+    const int EndFastShotIndex = 10;
+    
+    
     private void RefreshTravelTime()
     {
         switch (currentWP)
         {
-            case 0:
-                travelTime = 0;
-                break;
             case 1:
                 travelTime = startTravelTime;
                 break;
-            case 2:
-                travelTime = dragTravelTime;
-                TappingAction();
+            case StartDraggingIndex:
+                tutorialEvent.RaiseEvent(TutorialEvent.TutorialEventType.StartDragging);
                 break;
-            case 6:
-                tutorialEvent.RaiseEvent(TutorialEvent.TutorialEventType.EnableAim);
+            case EndDraggingIndex:
+                UntappingAction();
+                waiting = true;
+                StartCoroutine("WaitingCoroutine", 2f);
                 break;
-            case 7:
+            case StartSlowShotIndex:
                 TappingAction();
                 travelTime = shortShotTravelTime;
                 break;
-            case 8:
+            case EndSlowShotIndex:
                 tutorialEvent.RaiseEvent(TutorialEvent.TutorialEventType.EnableShoot);
                 break;
+            case StartFastShotIndex:
+                tutorialEvent.RaiseEvent(TutorialEvent.TutorialEventType.EnableFastShot);
+                break;
+            case EndFastShotIndex:
+                UntappingAction();
+                waiting = true;
+                StartCoroutine("WaitingCoroutine", 2f);
+                travelTime = exitTravelTime;
+                tutorialEvent.RaiseEvent(TutorialEvent.TutorialEventType.End);
+                break;
+
         }
     }
 
@@ -103,7 +122,6 @@ public class Finger : FollowWP
                 end = waypoints[currentWP].transform.position;
             elapsedTime = 0;
             RefreshTravelTime();
-
         }
     }
 
@@ -123,15 +141,17 @@ public class Finger : FollowWP
     {
         switch (eType)
         {
-            case TutorialEvent.TutorialEventType.EnableAim:
-                UntappingAction();
-                waiting = true;
-                StartCoroutine("WaitingCoroutine", 2f);
+            case TutorialEvent.TutorialEventType.StartDragging:
+                TappingAction();
+                travelTime = dragTravelTime;
                 break;
             case TutorialEvent.TutorialEventType.EnableShoot:
                 UntappingAction();
                 waiting = true;
                 StartCoroutine("WaitingCoroutine", 2f);
+                break;
+            case TutorialEvent.TutorialEventType.EnableFastShot:
+                TappingAction();
                 break;
         }
     }
